@@ -106,13 +106,26 @@ static async Task AddClientAsync()
     var firstName = Console.ReadLine()?.Trim() ?? string.Empty;
     Console.Write("Фамилия: ");
     var lastName = Console.ReadLine()?.Trim() ?? string.Empty;
+    Console.Write("Дата рождения (ГГГГ-ММ-ДД): ");
+    var birthDateText = Console.ReadLine()?.Trim() ?? string.Empty;
+    if (!DateOnly.TryParse(birthDateText, out var birthDate))
+    {
+        Console.WriteLine("Дата рождения обязательна и должна быть в формате ГГГГ-ММ-ДД.");
+        return;
+    }
     Console.Write("Телефон (необязательно): ");
     var phone = Console.ReadLine();
     Console.Write("Email (необязательно): ");
     var email = Console.ReadLine();
 
     await using var db = new FitnessContext();
-    var client = await ClientCommands.AddAsync(db, firstName, lastName, phone: phone, email: email);
+    var client = await ClientCommands.AddAsync(
+        db,
+        firstName,
+        lastName,
+        birthDate,
+        phone,
+        email);
     Console.WriteLine($"Клиент добавлен. ID: {client.ClientId}");
 }
 

@@ -18,6 +18,10 @@ public static class ClientCommands
         if (string.IsNullOrWhiteSpace(firstName) || string.IsNullOrWhiteSpace(lastName))
             throw new ArgumentException("Имя и фамилия обязательны.");
 
+        // В существующей базе fitnes birth_date имеет ограничение NOT NULL.
+        if (birthDate is null)
+            throw new ArgumentException("Дата рождения обязательна.");
+
         var client = new Client
         {
             FirstName = firstName.Trim(),
