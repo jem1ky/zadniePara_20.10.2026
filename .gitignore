@@ -1,0 +1,15 @@
+bin/
+obj/
+.vs/
+.idea/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+TestResults/
+*.db
+*.sqlite
+*.sqlite3
+appsettings.Local.json
+.env
+
