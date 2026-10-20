@@ -2,6 +2,8 @@
 
 #nullable disable
 
+// Миграция задания 10 добавляет необязательное поле note.
+
 namespace FitnessEf.Migrations
 {
     /// <inheritdoc />

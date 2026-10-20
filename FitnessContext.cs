@@ -2,13 +2,16 @@ using Microsoft.EntityFrameworkCore;
 
 namespace FitnessEf;
 
+// DbContext управляет подключением к PostgreSQL, запросами и отслеживанием изменений.
 public sealed class FitnessContext : DbContext
 {
+    // DbSet является точкой входа для LINQ-запросов к таблицам.
     public DbSet<Client> Clients => Set<Client>();
     public DbSet<Visit> Visits => Set<Visit>();
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
+        // Если параметры не передали извне, читаем строку подключения из переменной окружения.
         if (optionsBuilder.IsConfigured)
             return;
 
@@ -19,14 +22,17 @@ public sealed class FitnessContext : DbContext
                 "Не задана переменная FITNESS_EF_CONNECTION.");
         }
 
+        // UseNpgsql подключает провайдер EF Core для PostgreSQL.
         optionsBuilder.UseNpgsql(connectionString);
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        // Fluent API явно описывает реальные имена таблиц, столбцов, длины и ограничения.
         modelBuilder.Entity<Client>(entity =>
         {
             entity.ToTable("clients");
+            // В базе используется snake_case, поэтому имена задаются явно.
             entity.HasKey(client => client.ClientId);
 
             entity.Property(client => client.ClientId)
@@ -62,6 +68,7 @@ public sealed class FitnessContext : DbContext
                 .HasMaxLength(500);
         });
 
+        // Настройка one-to-many: удаление клиента запрещено, если у него есть посещения.
         modelBuilder.Entity<Visit>(entity =>
         {
             entity.ToTable("visits");

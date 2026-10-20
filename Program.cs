@@ -1,6 +1,7 @@
 using FitnessEf;
 using Microsoft.EntityFrameworkCore;
 
+// Точка входа консольного приложения: меню повторяется, пока пользователь не выберет выход.
 while (true)
 {
     Console.WriteLine();
@@ -16,10 +17,12 @@ while (true)
     Console.WriteLine("0. Выход");
     Console.Write("Выбор: ");
 
+    // Trim убирает случайные пробелы из пользовательского ввода.
     var choice = Console.ReadLine()?.Trim();
     if (choice == "0")
         break;
 
+    // Ошибки отдельной операции не завершают всё приложение: пользователь возвращается в меню.
     try
     {
         await ExecuteChoiceAsync(choice);
@@ -41,6 +44,7 @@ while (true)
 
 static async Task ExecuteChoiceAsync(string? choice)
 {
+    // Для каждого пункта меню вызывается отдельный метод с короткоживущим DbContext.
     switch (choice)
     {
         case "1": await ListClientsAsync(); break;
@@ -58,6 +62,7 @@ static async Task ExecuteChoiceAsync(string? choice)
 
 static async Task ListClientsAsync()
 {
+    // AsNoTracking подходит для чтения: EF Core не тратит память на отслеживание изменений.
     await using var db = new FitnessContext();
     var clients = await ClientQueries.ListAsync(db);
     foreach (var client in clients)
@@ -66,6 +71,7 @@ static async Task ListClientsAsync()
 
 static async Task FindClientAsync()
 {
+    // Сначала проверяем формат ID, затем выполняем параметризованный запрос через EF Core.
     if (!TryReadId(out var id))
         return;
 
@@ -78,6 +84,7 @@ static async Task FindClientAsync()
 
 static async Task SearchClientsAsync()
 {
+    // Поиск по фамилии превращается провайдером Npgsql в SQL с параметром.
     Console.Write("Фрагмент фамилии: ");
     var term = Console.ReadLine()?.Trim() ?? string.Empty;
     if (term.Length == 0)
@@ -94,6 +101,7 @@ static async Task SearchClientsAsync()
 
 static async Task AddClientAsync()
 {
+    // Данные читаются из консоли, проверяются в ClientCommands и сохраняются одним SaveChangesAsync.
     Console.Write("Имя: ");
     var firstName = Console.ReadLine()?.Trim() ?? string.Empty;
     Console.Write("Фамилия: ");
@@ -110,6 +118,7 @@ static async Task AddClientAsync()
 
 static async Task UpdateClientAsync()
 {
+    // Загруженная без AsNoTracking сущность отслеживается контекстом, поэтому изменения обнаруживаются автоматически.
     if (!TryReadId(out var id))
         return;
 
@@ -128,6 +137,7 @@ static async Task UpdateClientAsync()
 
 static async Task DeleteClientAsync()
 {
+    // Remove помечает сущность на удаление; фактический DELETE отправляется при SaveChangesAsync.
     if (!TryReadId(out var id))
         return;
 
@@ -139,6 +149,7 @@ static async Task DeleteClientAsync()
 
 static async Task ShowStatisticsAsync()
 {
+    // CountAsync и AnyAsync выполняются на стороне PostgreSQL и не загружают весь список в память.
     await using var db = new FitnessContext();
     var total = await ClientQueries.CountAsync(db);
     var active = await ClientQueries.CountActiveAsync(db);
@@ -148,6 +159,7 @@ static async Task ShowStatisticsAsync()
 
 static async Task ListClientsWithVisitsAsync()
 {
+    // Include загружает связанные посещения одним запросом EF Core.
     await using var db = new FitnessContext();
     var clients = await ClientQueries.ListWithVisitsAsync(db);
     foreach (var client in clients)
@@ -160,6 +172,7 @@ static async Task ListClientsWithVisitsAsync()
 
 static async Task ShowSqlAsync()
 {
+    // ToQueryString показывает SQL, который EF Core построил из LINQ-выражения.
     await using var db = new FitnessContext();
     var query = db.Clients
         .Where(client => client.Status == "active")
@@ -170,6 +183,7 @@ static async Task ShowSqlAsync()
 
 static bool TryReadId(out int id)
 {
+    // Метод возвращает false вместо исключения, если пользователь ввёл не положительный integer.
     Console.Write("ID клиента: ");
     if (int.TryParse(Console.ReadLine(), out id) && id > 0)
         return true;

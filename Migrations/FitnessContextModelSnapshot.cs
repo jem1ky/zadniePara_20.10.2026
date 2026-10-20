@@ -3,6 +3,8 @@ using System;
 using FitnessEf;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+
+// Snapshot используется EF Core для вычисления следующей миграции.
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 

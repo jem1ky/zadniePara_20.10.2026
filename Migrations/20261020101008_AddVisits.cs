@@ -4,6 +4,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
+// Миграция задания 9 добавляет visits и внешний ключ на clients.
+
 namespace FitnessEf.Migrations
 {
     /// <inheritdoc />

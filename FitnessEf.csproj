@@ -1,5 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
+  <!-- Базовые настройки консольного приложения и включённая nullable-проверка. -->
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>net8.0</TargetFramework>
@@ -7,6 +8,7 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <!-- Пакеты EF Core для миграций и PostgreSQL-провайдер Npgsql. -->
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.19">
       <PrivateAssets>all</PrivateAssets>

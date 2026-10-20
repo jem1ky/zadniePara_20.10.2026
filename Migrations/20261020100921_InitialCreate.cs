@@ -4,6 +4,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
+// Миграция задания 3 создаёт таблицу clients и первичный ключ клиента.
+
 namespace FitnessEf.Migrations
 {
     /// <inheritdoc />
