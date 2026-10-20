@@ -20,7 +20,7 @@
 3. Задать строку подключения без публикации пароля в репозитории:
 
    ```powershell
-   $env:FITNESS_EF_CONNECTION = "Host=localhost;Port=5432;Database=FitnessEfTraining;Username=postgres;Password=YOUR_PASSWORD"
+   $env:FITNESS_EF_CONNECTION = "Host=localhost;Port=5432;Database=fitnes;Username=postgres;Password=YOUR_PASSWORD"
    ```
 
 4. Запустить приложение:
@@ -28,6 +28,10 @@
    ```powershell
    dotnet run
    ```
+
+Для этой рабочей базы имя PostgreSQL указано как `fitnes` с одной буквой `s`. Пароль не хранится в проекте и не должен попадать в GitHub.
+
+Скрипт `database/fitnes-setup.sql` можно выполнить в Query Tool pgAdmin4. Он добавляет только недостающие для проекта `clients.note` и таблицу `visits`; существующие данные клиентов не удаляются.
 
 Практические задания выполняются последовательно. Каждый этап имеет отдельный коммит с номером задания.
 
