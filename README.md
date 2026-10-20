@@ -38,3 +38,5 @@
 Изменение и удаление выполняются в `ClientCommands` через отслеживаемую сущность и `SaveChangesAsync`; пустые обязательные имя и фамилия отклоняются до обращения к базе.
 
 `BirthDate`, `Phone` и `Email` допускают `NULL`, а Fluent API явно задаёт snake_case-имена, размеры строк и PostgreSQL-тип `date`.
+
+Меню использует короткоживущий `DbContext`, async-операторы EF Core, обработку `InvalidOperationException` и `DbUpdateException`, а пункт диагностики выводит SQL через `ToQueryString()`.
